@@ -94,5 +94,9 @@ git clone git@github.com:Maheer1207/Neuronauts.git
 2. Open one terminal window and run the following command: `muselsl stream --name MuseS-799A`
 3. Open another terminal window and run the following command: `python3 app.py`
 
-If you run into an error on MacOS related to muselsl, please try running the following command: 
+Notes: 
+
+1. If you run into an error on MacOS related to muselsl, please try running the following command: 
 `brew install labstreaminglayer/tap/lsl`
+
+2. Make sure you have your bluetooth settings on if you are running on Visual Studio Code or on any other platforms. This is required to let our program to connect to the Muse S. 
