@@ -22,6 +22,11 @@ git clone git@github.com:Maheer1207/Neuronauts.git
 ```
 ---
 
+**Set up environment variables**:  
+   - Create a `.env` file in the `Neuronauts` directory and add your environment-specific variables.
+   - Use the `envSample.txt` as a template for structuring your `.env` file.
+   - Ensure the IP address in your .env file matches the IP of the network you are currently connected to. 
+
 ## Setting up the Virtual Environment
 1. Ensure you are in the root directory
 
@@ -46,20 +51,6 @@ git clone git@github.com:Maheer1207/Neuronauts.git
    pip install flask flask-socketio brainflow eventlet
    ```
 
-## Setting Up the Backend
-
-1. Navigate to the `backend` folder:
-   ```bash
-   cd backend
-   ```
-   
-2. Run the backend server:
-   ```bash
-   python3 app.py
-   ```
-
----
-
 ## Setting Up the Frontend
 
 1. Open a new terminal window and navigate to the `frontend` folder:
@@ -79,6 +70,20 @@ git clone git@github.com:Maheer1207/Neuronauts.git
 
 ---
 
+## Setting Up the Backend
+
+1. Navigate to the `backend` folder:
+   ```bash
+   cd backend
+   ```
+   
+2. Run the backend server:
+   ```bash
+   python3 app.py
+   ```
+
+---
+
 ## Running the Application
 
 1. Open **two terminal windows**:
@@ -86,7 +91,7 @@ git clone git@github.com:Maheer1207/Neuronauts.git
    - One for the **backend**: Follow the steps in [Setting Up the Backend](#setting-up-the-backend).
 
 2. Once both servers are running:
-   - Access the application via the URL provided by the frontend server (usually `http://localhost:3000`).
+   - Access the application via the URL provided by the frontend server (probably will be `http://localhost:5000`).
 
 ## Running the python code to view the real time data from Muse S
 
