@@ -22,18 +22,14 @@ git clone git@github.com:Maheer1207/Neuronauts.git
 ```
 ---
 
-## Setting Up the Backend
-
-1. Navigate to the `backend` folder:
-   ```bash
-   cd backend
-   ```
+## Setting up the Virtual Environment
+1. Ensure you are in the root directory
 
 2. Create a virtual environment:
    ```bash
    python3 -m venv venv
    ```
-
+   
 3. Activate the virtual environment:
 
    - **On macOS/Linux**:
@@ -44,13 +40,20 @@ git clone git@github.com:Maheer1207/Neuronauts.git
      ```bash
      venv\Scripts\activate
      ```
-
+     
 4. Install required Python dependencies:
    ```bash
    pip install flask flask-socketio brainflow eventlet
    ```
 
-5. Run the backend server:
+## Setting Up the Backend
+
+1. Navigate to the `backend` folder:
+   ```bash
+   cd backend
+   ```
+   
+2. Run the backend server:
    ```bash
    python3 app.py
    ```
