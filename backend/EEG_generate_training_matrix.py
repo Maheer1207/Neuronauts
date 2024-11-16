@@ -76,19 +76,19 @@ def gen_training_matrix(file_path, output_file, cols_to_ignore):
 	return None
 
 
-if __name__ == '__main__':
-	"""
-	Main function. The parameters for the script are the following:
-		[1] file_path: The path to the CSV file to process.
-		[2] output_file: The filename of the generated output file.
+# if __name__ == '__main__':
+# 	"""
+# 	Main function. The parameters for the script are the following:
+# 		[1] file_path: The path to the CSV file to process.
+# 		[2] output_file: The filename of the generated output file.
 	
-	ATTENTION: It will ignore the last column of the CSV file. 
+# 	ATTENTION: It will ignore the last column of the CSV file. 
 	
-	Author:
-		Original by [lmanso]
-		Documentation: [fcampelo]
-	"""
+# 	Author:
+# 		Original by [lmanso]
+# 		Documentation: [fcampelo]
+# 	"""
 
-	file_path = '/content/input/name-concentrating-1.csv'
-	output_file = '/content/output_test.csv'
-	gen_training_matrix(file_path, output_file, cols_to_ignore=-1)
+# 	file_path = '/content/input/name-concentrating-1.csv'
+# 	output_file = '/content/output_test.csv'
+# 	gen_training_matrix(file_path, output_file, cols_to_ignore=-1)

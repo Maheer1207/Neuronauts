@@ -2,6 +2,7 @@ import os
 from pylsl import StreamInlet, resolve_stream
 import time
 import csv
+from EEG_generate_training_matrix import gen_training_matrix
 
 # Define the EEG channel names for your Muse S (5 channels)
 eeg_channel_names = [
@@ -17,6 +18,7 @@ inlet = StreamInlet(streams[0])
 
 # Define the base output directory
 base_output_directory = "Output"
+base_output_training_directory = "Output_training"
 
 # Determine the next available session folder
 session_number = 1
@@ -25,6 +27,12 @@ while True:
     if not os.path.exists(session_directory):
         os.makedirs(session_directory, exist_ok=True)
         break
+   
+    session_training_directory = os.path.join(base_output_training_directory, str(session_number))
+    if not os.path.exists(session_training_directory):
+        os.makedirs(session_training_directory, exist_ok=True)
+        break
+
     session_number += 1
 
 print(f"Data will be saved in {session_directory}...")
@@ -60,6 +68,10 @@ try:
             
             print(f"Saved data to {file_path}")
             
+            generated_file_name = f"eeg_data_{file_count}.csv"
+            generated_file_path = os.path.join(session_training_directory, generated_file_name)
+            gen_training_matrix(file_path, generated_file_path, cols_to_ignore=-1)
+
             # Clear the data buffer and increment the file counter
             data_buffer.clear()
             file_count += 1
