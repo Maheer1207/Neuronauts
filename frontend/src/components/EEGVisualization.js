@@ -17,7 +17,7 @@ function EEGVisualization({ data }) {
         <Plot
             data={plotData}
             layout={{
-                title: "Real-Time EEG Data (4 Channels)",
+                title: "Real-Time EEG Data (5 Channels)",
                 xaxis: { title: "Time (ms)" },
                 yaxis: {
                     title: "Amplitude (µV)",

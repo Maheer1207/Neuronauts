@@ -5,11 +5,11 @@ import NotesPanel from "./NotesPanel";
 import { io } from "socket.io-client";
 
 function Dashboard({ patientName }) {
-    const [data, setData] = useState([[], [], [], []]); // Placeholder for EEG data (4 channels)
+    const [data, setData] = useState([[], [], [], [], []]); // Placeholder for EEG data (5 channels)
     const [mood, setMood] = useState("");
 
     useEffect(() => {
-        const socket = io("http://localhost:5000");
+        const socket = io("http://localhost:5002");
         socket.emit("start_stream");
 
         socket.on("eeg_data", (payload) => {
