@@ -92,7 +92,7 @@ git clone git@github.com:Maheer1207/Neuronauts.git
 
 1. Run the following command to install the required libraries: `pip install pylsl` and `pip install muselsl`
 2. Open one terminal window and run the following command: `muselsl stream --name MuseS-799A`
-3. Open another terminal window and run the following command: `python3 app.py`
+3. Open another terminal window and run the following command: `python3 Muse_EEG_data_extraction.py`
 
 Notes: 
 
