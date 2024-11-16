@@ -17,7 +17,7 @@ import numpy as np
 from EEG_feature_extraction import generate_feature_vectors_from_samples
 
 
-def gen_training_matrix(file_path, output_file, cols_to_ignore):
+def gen_matrix(file_path, output_file, cols_to_ignore, training=True):
 	"""
 	Reads the specified CSV file and assembles the training matrix with 
 	the features extracted using the functions from EEG_feature_extraction.
@@ -38,20 +38,23 @@ def gen_training_matrix(file_path, output_file, cols_to_ignore):
 	# Parse file name
 	try:
 		filename = file_path.split('/')[-1]
-		name, state, _ = filename[:-4].split('-')
+		if (training):
+			name, state, _ = filename[:-4].split('_')
+		else: state = None
 	except:
 		print('Wrong file name', file_path)
 		sys.exit(-1)
-		
-	if state.lower() == 'concentrating':
-		state = 2.0
-	elif state.lower() == 'neutral':
-		state = 1.0
-	elif state.lower() == 'relaxed':
-		state = 0.0
-	else:
-		print('Wrong file name', file_path)
-		sys.exit(-1)
+
+	if (training):
+		if state.lower() == 'concentrating':
+			state = 2.0
+		elif state.lower() == 'neutral':
+			state = 1.0
+		elif state.lower() == 'relaxed':
+			state = 0.0
+		else:
+			print('Wrong file name', file_path)
+			sys.exit(-1)
 		
 	print('Using file', file_path)
 	

@@ -2,7 +2,7 @@ import os
 from pylsl import StreamInlet, resolve_stream
 import time
 import csv
-from EEG_generate_training_matrix import gen_training_matrix
+from EEG_generate_training_matrix import gen_matrix
 
 # Define the EEG channel names for your Muse S (5 channels)
 eeg_channel_names = [
@@ -28,10 +28,10 @@ while True:
         os.makedirs(session_directory, exist_ok=True)
         break
    
-    session_training_directory = os.path.join(base_output_training_directory, str(session_number))
-    if not os.path.exists(session_training_directory):
-        os.makedirs(session_training_directory, exist_ok=True)
-        break
+    # session_training_directory = os.path.join(base_output_training_directory, str(session_number))
+    # if not os.path.exists(session_training_directory):
+    #     os.makedirs(session_training_directory, exist_ok=True)
+    #     break
 
     session_number += 1
 
@@ -63,14 +63,14 @@ try:
             # Write the data buffer to the file
             with open(file_path, mode="w", newline="") as file:
                 writer = csv.writer(file)
-                writer.writerow(["Timestamp"] + eeg_channel_names)  # Write header
+                writer.writerow(["timestamps"] + eeg_channel_names)  # Write header
                 writer.writerows(data_buffer)  # Write buffered data
             
             print(f"Saved data to {file_path}")
             
-            generated_file_name = f"eeg_data_{file_count}.csv"
-            generated_file_path = os.path.join(session_training_directory, generated_file_name)
-            gen_training_matrix(file_path, generated_file_path, cols_to_ignore=-1)
+            generated_file_name = f"eeg_data_expanded_{file_count}.csv"
+            generated_file_path = os.path.join(session_directory, generated_file_name)
+            gen_matrix(file_path, generated_file_path, cols_to_ignore=-1, training=False)
 
             # Clear the data buffer and increment the file counter
             data_buffer.clear()
