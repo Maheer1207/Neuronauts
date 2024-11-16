@@ -3,6 +3,18 @@ from flask_socketio import SocketIO, emit
 from brainflow.board_shim import BoardShim, BrainFlowInputParams, BoardIds
 import eventlet
 import random
+from dotenv import load_dotenv
+import os
+
+# Load .env file
+dotenv_path = '../.env'  # Ensure the .env file is in the same directory
+if not load_dotenv(dotenv_path=dotenv_path):
+    print("Warning: .env file not found. Using default configuration.")
+
+# Get environment variables with fallback defaults
+ip_address = os.getenv("IP_ADDRESS")
+port = int(os.getenv("PORT"))  
+print(f"Loaded configuration - IP_ADDRESS: {ip_address}, PORT: {port}")
 
 # Initialize Flask and Flask-SocketIO
 app = Flask(__name__)
@@ -21,7 +33,8 @@ try:
     board.start_stream()
     print("BrainFlow streaming started.")
 except Exception as e:
-    print(f"Error in initializing BrainFlow: {e}")
+    print(f"Error initializing BrainFlow: {e}")
+    board = None  # Ensure board is None if initialization fails
 
 @app.route('/')
 def index():
@@ -35,6 +48,11 @@ def handle_connect():
 
 @socketio.on('start_stream')
 def stream_eeg():
+    if not board:
+        print("Error: BrainFlow board is not initialized.")
+        emit('error', {'message': 'BrainFlow board is not initialized.'})
+        return
+
     print("Received start_stream event from frontend")
 
     try:
@@ -46,7 +64,7 @@ def stream_eeg():
                 print("No data received from BrainFlow.")
                 continue
 
-            # Select only the first 4 channels and scale
+            # Select only the first 5 channels and scale
             scaled_data = (data[:5, :] / 1e6).tolist()  # Scale and convert to list format
             mood = random.choice(["Calm", "Anxious", "Focused", "Happy"])
 
@@ -55,21 +73,27 @@ def stream_eeg():
             socketio.sleep(0.5)  # Adjust delay for slower updates
     except Exception as e:
         print(f"Error in streaming EEG data: {e}")
+        emit('error', {'message': 'Error occurred while streaming EEG data.'})
 
 
 @app.route('/shutdown')
 def shutdown():
-    board.stop_stream()
-    board.release_session()
-    print("Session stopped and resources released.")
+    if board:
+        board.stop_stream()
+        board.release_session()
+        print("Session stopped and resources released.")
     return "Session stopped and resources released."
 
 # Run the Flask app with SocketIO
 if __name__ == '__main__':
+    print(f"Server is running on {ip_address}:{port}")
     try:
         print("Starting the Flask backend...")
-        socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+        socketio.run(app, host=ip_address, port=port, debug=True)
+    except Exception as e:
+        print(f"Error running server: {e}")
     finally:
-        print("Shutting down and releasing BrainFlow resources.")
-        board.stop_stream()
-        board.release_session()
+        if board:
+            print("Shutting down and releasing BrainFlow resources.")
+            board.stop_stream()
+            board.release_session()
