@@ -3,6 +3,11 @@ import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import Dashboard from "./components/Dashboard";
 
+const ipAddress = process.env.REACT_APP_IP_ADDRESS;
+const port = process.env.REACT_APP_PORT;
+
+console.log(`Connecting to WebSocket server at ${ipAddress}:${port}`);
+
 
 function App() {
     const [data, setData] = useState([]);
@@ -10,7 +15,7 @@ function App() {
 
     useEffect(() => {
         // Connect to the WebSocket server
-        const socket = io("http://localhost:5000");
+        const socket = io(`http://${ipAddress}:${port}`);
 
         // Emit the start_stream event to trigger EEG data streaming
         socket.emit("start_stream");

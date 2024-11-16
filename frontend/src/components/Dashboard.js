@@ -4,12 +4,15 @@ import EEGVisualization from "./EEGVisualization";
 import NotesPanel from "./NotesPanel";
 import { io } from "socket.io-client";
 
+const ipAddress = process.env.REACT_APP_IP_ADDRESS;
+const port = process.env.REACT_APP_PORT;
+
 function Dashboard({ patientName }) {
     const [data, setData] = useState([[], [], [], []]); // Placeholder for EEG data (4 channels)
     const [mood, setMood] = useState("");
 
     useEffect(() => {
-        const socket = io("http://localhost:5000");
+        const socket = io(`http://${ipAddress}:${port}`);
         socket.emit("start_stream");
 
         socket.on("eeg_data", (payload) => {
