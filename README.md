@@ -87,3 +87,10 @@ git clone git@github.com:Maheer1207/Neuronauts.git
 
 2. Once both servers are running:
    - Access the application via the URL provided by the frontend server (usually `http://localhost:3000`).
+
+## Running the python code to view the real time data from Muse S
+
+1. Run the following command to install the required libraries: `pip install pylsl` and `pip install muselsl`
+2. Open one terminal window and run the following command: `muselsl stream --name MuseS-799A`
+3. Open another terminal window and run the following command: `python3 app.py`
+
