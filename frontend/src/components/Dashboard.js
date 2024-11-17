@@ -1,4 +1,3 @@
-// src/components/Dashboard.js
 import React, { useState, useEffect } from "react";
 import EEGVisualization from "./EEGVisualization";
 import NotesPanel from "./NotesPanel";
@@ -9,15 +8,20 @@ import windEMDR from "../audio/windEMDR.mp3";
 
 function Dashboard({ patientName }) {
     const [data, setData] = useState([[], [], [], [], []]); // Placeholder for EEG data (5 channels)
-    const [mood, setMood] = useState("");
+    const [mood, setMood] = useState("Unknown");
 
     useEffect(() => {
         const socket = io("http://localhost:5000");
         socket.emit("start_stream");
 
         socket.on("eeg_data", (payload) => {
-            setData(payload.data);
-            setMood(payload.mood);
+            if (payload?.data && Array.isArray(payload.data) && payload.data.length === 5) {
+                setData(payload.data);
+            } else {
+                console.warn("Invalid data format received from backend:", payload.data);
+            }
+
+            setMood(payload?.mood || "Unknown");
         });
 
         return () => socket.disconnect();
@@ -26,43 +30,34 @@ function Dashboard({ patientName }) {
     return (
         <div style={styles.dashboardContainer}>
             {/* Header */}
-            
             <div style={styles.firstLayer}>
+                <div style={styles.header}>
+                    <h1 style={styles.title}>Patient Dashboard</h1>
+                </div>
 
-            <div style={styles.header}>
-                <h1 style={styles.title}>Patient Dashboard</h1>
-                {/* Content */}
-            <div style={styles.content}>
+                {/* Left Panel (EEG Visualization and Sound) */}
+                <div style={styles.leftPanel}>
+                    <div style={styles.graphCard}>
+                        <h3 style={styles.mood}>Current Mood: {mood}</h3>
+                        <EEGVisualization data={data} />
+                    </div>
+                    <div style={styles.visualContainer}>
+                        <div style={styles.soundCard}>
+                            <h3 style={styles.mood}>Audio Visualization</h3>
+                            <SoundVisualizer audioFile={windEMDR} mood={mood} />
+                        </div>
+                        <div style={styles.videoCard}></div>
+                    </div>
+                </div>
+
                 {/* Right Panel (Notes) */}
                 <div style={styles.rightPanel}>
                     <div style={styles.notesCard}>
                         <NotesPanel />
                     </div>
-                </div>                
-            </div>
-            </div>
-
-             {/* Left Panel (EEG Visualization and Sound) */}
-            <div style={styles.leftPanel}>
-                    <div style={styles.graphCard}>
-                        <h3 style={styles.mood}>Current Mood: {mood}</h3>
-                        <EEGVisualization data={data} />
-                    </div>
-
-
-                    <div style={styles.visualContainer}>
-                    <div style={styles.soundCard}>
-                        <h3 style={styles.mood}>Audio Visualization</h3>
-                        <SoundVisualizer audioFile={windEMDR} mood={mood} />
-                    </div>
-
-                    <div style={styles.videoCard}>
-
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
     );
 }
 

@@ -1,9 +1,9 @@
-// src/components/EEGVisualization.js
 import React from "react";
 import Plot from "react-plotly.js";
 import "../colors.css"; // Import the color palette
 
 function EEGVisualization({ data }) {
+  // Ensure data is an array of arrays with consistent lengths
   const plotData =
     Array.isArray(data) && data.length > 0
       ? data.map((channel, index) => ({
@@ -18,8 +18,9 @@ function EEGVisualization({ data }) {
               "var(--sky-blue)",
               "var(--ut-orange)",
               "var(--selective-yellow)",
-            ][index % 4], // Assign a unique color to each channel
-            width: 2.5, // Slightly thicker lines for better visibility
+              "var(--prussian-blue)",
+            ][index % 5], // Assign a unique color to each channel
+            width: 2.5,
           },
         }))
       : [];
@@ -27,56 +28,52 @@ function EEGVisualization({ data }) {
   return (
     <div style={styles.container}>
       <div style={styles.graphWrapper}>
-        {" "}
-        {/* Wrapper for rounded corners */}
         <Plot
-            data={plotData}
-            layout={{
-                title: {
-                    text: "Real-Time EEG Data (5 Channels)",
-                    font: {
-                        family: "'Roboto', Arial, sans-serif",
-                        size: 20,
-                        color: "black", // Title in white for contrast
-                    },
-                    xanchor: "center",
-                },
-                xaxis: {
-                    title: { text: "Time (ms)", font: { color: "white" } },
-                    gridcolor: "rgba(255, 255, 255, 0.2)", // Subtle white gridlines
-                    zerolinecolor: "rgba(255, 255, 255, 0.3)",
-                },
-                yaxis: {
-                    title: { text: "Amplitude (µV)", font: { color: "white" } },
-                    autorange: true, // Automatically adjust range
-                    gridcolor: "rgba(255, 255, 255, 0.2)", // Subtle white gridlines
-                    zerolinecolor: "rgba(255, 255, 255, 0.3)",
-                },
-                plot_bgcolor: "var(--sky-blue)", // Plot area background
-                paper_bgcolor: "var(--blue-green)", // Entire chart background
-                margin: { l: 50, r: 30, t: 60, b: 50 }, // Padding around the chart
-                showlegend: true,
-                legend: {
-                    font: {
-                        color: "black",
-                        size: 12,
-                    },
-                    orientation: "h",
-                    x: 0.5,
-                    xanchor: "center",
-                    y: -0.2,
-                },
-            }}
-            config={{
-                scrollZoom: true, // Enable scroll to zoom
-                displayModeBar: true, // Show toolbar for interactions
-                modeBarButtonsToAdd: ["zoom2d", "pan2d", "resetScale2d"], // Add zoom/pan options
-                displaylogo: false, // Remove Plotly logo from toolbar
-            }}
-            style={{ width: "100%", height: "100%" }} // Fill wrapper container
+          data={plotData}
+          layout={{
+            title: {
+              text: "Real-Time EEG Data (5 Channels)",
+              font: {
+                family: "'Roboto', Arial, sans-serif",
+                size: 20,
+                color: "black",
+              },
+              xanchor: "center",
+            },
+            xaxis: {
+              title: { text: "Time (ms)", font: { color: "black" } },
+              gridcolor: "rgba(0, 0, 0, 0.2)",
+              zerolinecolor: "rgba(0, 0, 0, 0.3)",
+            },
+            yaxis: {
+              title: { text: "Amplitude (µV)", font: { color: "black" } },
+              autorange: true,
+              gridcolor: "rgba(0, 0, 0, 0.2)",
+              zerolinecolor: "rgba(0, 0, 0, 0.3)",
+            },
+            plot_bgcolor: "var(--sky-blue)",
+            paper_bgcolor: "var(--blue-green)",
+            margin: { l: 50, r: 30, t: 60, b: 50 },
+            showlegend: true,
+            legend: {
+              font: {
+                color: "black",
+                size: 12,
+              },
+              orientation: "h",
+              x: 0.5,
+              xanchor: "center",
+              y: -0.2,
+            },
+          }}
+          config={{
+            scrollZoom: true,
+            displayModeBar: true,
+            modeBarButtonsToAdd: ["zoom2d", "pan2d", "resetScale2d"],
+            displaylogo: false,
+          }}
+          style={{ width: "100%", height: "100%" }}
         />
-
-
       </div>
     </div>
   );
