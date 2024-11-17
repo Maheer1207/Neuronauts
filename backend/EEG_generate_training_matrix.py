@@ -68,7 +68,8 @@ def gen_matrix(file_path, output_file, cols_to_ignore, training=True):
 															cols_to_ignore=cols_to_ignore)
 		
 	print('Resulting vector shape for the file', vectors.shape)
-	
+	header += ["magic"]
+
 	# Shuffle rows
 	np.random.shuffle(vectors)
 	
