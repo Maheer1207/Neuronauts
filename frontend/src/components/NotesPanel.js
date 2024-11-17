@@ -29,7 +29,7 @@ function NotesPanel() {
     return (
         <div style={styles.gradientWrapper}>
             <div style={styles.container}>
-                <h2 style={styles.header}>Patient Notes</h2>
+                <h3>Patient Notes</h3>
                 <textarea
                     rows="10"
                     style={styles.textareaLarge}
@@ -59,7 +59,7 @@ function NotesPanel() {
 const styles = {
     gradientWrapper: {
         padding: "15px",
-        background: "linear-gradient(135deg, rgba(112, 193, 179, 1), rgba(44, 127, 184, 1))",
+        background: "#006BA6",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -90,7 +90,7 @@ const styles = {
         width: "100%",
         maxWidth: "800px",
         height: "300px",
-        padding: "12px",
+        padding: "5px",
         marginBottom: "12px",
         borderRadius: "10px",
         border: "2px solid var(--blue-green)",
@@ -120,7 +120,7 @@ const styles = {
         maxWidth: "800px",
         marginTop: "20px",
         borderTop: "2px solid var(--border-color)",
-        paddingTop: "20px",
+        paddingTop: "0px",
         display: "flex",
         flexDirection: "column",
         gap: "15px",

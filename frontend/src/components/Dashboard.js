@@ -26,34 +26,43 @@ function Dashboard({ patientName }) {
     return (
         <div style={styles.dashboardContainer}>
             {/* Header */}
+            
+            <div style={styles.firstLayer}>
+
             <div style={styles.header}>
                 <h1 style={styles.title}>Patient Dashboard</h1>
-                <h2 style={styles.subtitle}>Patient: {patientName}</h2>
-            </div>
-
-            {/* Content */}
+                {/* Content */}
             <div style={styles.content}>
-                {/* Left Panel (EEG Visualization and Sound) */}
-                <div style={styles.leftPanel}>
-                    <div style={styles.graphCard}>
-                        <h3 style={styles.mood}>Current Mood: {mood}</h3>
-                        <EEGVisualization data={data} />
-                    </div>
-
-                    <div style={styles.soundCard}>
-                        <h3 style={styles.mood}>Audio Visualization</h3>
-                        <SoundVisualizer audioFile={windEMDR} mood={mood} />
-                    </div>
-                </div>
-
                 {/* Right Panel (Notes) */}
                 <div style={styles.rightPanel}>
                     <div style={styles.notesCard}>
                         <NotesPanel />
                     </div>
+                </div>                
+            </div>
+            </div>
+
+             {/* Left Panel (EEG Visualization and Sound) */}
+            <div style={styles.leftPanel}>
+                    <div style={styles.graphCard}>
+                        <h3 style={styles.mood}>Current Mood: {mood}</h3>
+                        <EEGVisualization data={data} />
+                    </div>
+
+
+                    <div style={styles.visualContainer}>
+                    <div style={styles.soundCard}>
+                        <h3 style={styles.mood}>Audio Visualization</h3>
+                        <SoundVisualizer audioFile={windEMDR} mood={mood} />
+                    </div>
+
+                    <div style={styles.videoCard}>
+
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
     );
 }
 
@@ -65,75 +74,91 @@ const styles = {
         minHeight: "100vh",
     },
     header: {
-        textAlign: "center",
+        textAlign: "left",
         marginBottom: "20px",
         color: "var(--text-primary)",
+    },
+    firstLayer: {
+        display: "flex",
+        gap: "20px",
     },
     title: {
         fontSize: "2.5rem",
         fontWeight: "bold",
         margin: 0,
         color: "var(--blue-green)",
+        marginBottom: "25px",
     },
     subtitle: {
         fontSize: "1.5rem",
         fontWeight: "300",
         color: "var(--text-secondary)",
     },
-    content: {
-        display: "flex",
-        gap: "20px",
-    },
     leftPanel: {
-        flex: 2,
-    },
-    rightPanel: {
         flex: 1,
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        flexDirection: "column",
+        gap: "20px",
+    },
+    rightPanel: {
+        flex: 0.8, // Reduced width for the right panel
+        display: "flex",
+        flexDirection: "column",
+        gap: "20px",
+    },
+    visualContainer: {
+        display: "flex",
+        gap: "20px",
     },
     graphCard: {
         borderRadius: "20px",
         padding: "20px",
         background: "white",
-        boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)",
         border: "none",
-        position: "relative",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
+        textAlign: "center",
+
     },
     soundCard: {
-        marginTop: "20px",
         borderRadius: "20px",
         padding: "20px",
-        background: "white",
+        background: "#fb8500", // Gradient background
         boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)",
         border: "none",
-        position: "relative",
         textAlign: "center",
+        flex: 0.5,
+    },
+    videoCard: {
+        borderRadius: "20px",
+        padding: "20px",
+        background: "#D81159", //linear-gradient(135deg, , rgba(255, 105, 180, 1))", // Gradient background
+        boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)",
+        border: "none",
+        textAlign: "center",
+        flex: 0.5,
     },
     notesCard: {
-        borderRadius: "20px",
-        width: "100%",
-        height: "93%",
-        padding: "20px",
-        background: "linear-gradient(135deg, rgba(112, 193, 179, 1), rgba(44, 127, 184, 1))",
-        boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)",
+        borderRadius: "10px", // Smaller border radius
+        width: "90%", // Reduced width to fit better
+        padding: "0px",
+        background: "#006BA6",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)", // Reduced shadow intensity
         border: "none",
-        position: "relative",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         textAlign: "center",
-        overflow: "hidden",
+        height: "auto", // Allow the height to adapt to content
+        gap: "10px", // Add spacing between elements
     },
     mood: {
-        marginTop: "20px",
+        marginBottom: "10px",
         textAlign: "center",
-        fontSize: "1.1rem",
+        fontSize: "1.2rem",
+        fontWeight: "bold",
         color: "var(--prussian-blue)",
     },
 };

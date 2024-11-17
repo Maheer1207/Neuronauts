@@ -33,11 +33,11 @@ function EEGVisualization({ data }) {
             data={plotData}
             layout={{
                 title: {
-                    text: "Real-Time EEG Data (4 Channels)",
+                    text: "Real-Time EEG Data (5 Channels)",
                     font: {
                         family: "'Roboto', Arial, sans-serif",
                         size: 20,
-                        color: "white", // Title in white for contrast
+                        color: "black", // Title in white for contrast
                     },
                     xanchor: "center",
                 },
@@ -58,7 +58,7 @@ function EEGVisualization({ data }) {
                 showlegend: true,
                 legend: {
                     font: {
-                        color: "white",
+                        color: "black",
                         size: 12,
                     },
                     orientation: "h",
@@ -87,7 +87,7 @@ const styles = {
     borderRadius: "20px",
     overflow: "hidden", // Ensures inner content respects border radius
     boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)", // Add shadow for depth
-    background: "linear-gradient(135deg, #70c1b3, #2c7fb8)", // Adjusted gradient
+    background: "#FFBC42", // Adjusted gradient
     padding: "20px",
     border: "1px solid rgba(255, 255, 255, 0.3)", // Subtle border for separation
   },

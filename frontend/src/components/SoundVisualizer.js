@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { FaPlay, FaPause, FaFastForward, FaFastBackward } from "react-icons/fa";
 import { MdFastForward, MdFastRewind } from "react-icons/md";
+import "../colors.css";
 
 const SoundVisualizer = ({ audioFile }) => {
     const waveSurferRef = useRef(null); // Reference to the WaveSurfer instance
@@ -13,9 +14,9 @@ const SoundVisualizer = ({ audioFile }) => {
         // Initialize WaveSurfer
         waveSurferRef.current = WaveSurfer.create({
             container: containerRef.current,
-            waveColor: "violet",
-            progressColor: "purple",
-            cursorColor: "navy",
+            waveColor: "orange",
+            progressColor: "var(--selective-yellow)",
+            cursorColor: "#ffb703",
             barWidth: 2,
             barRadius: 2,
             responsive: true,
@@ -124,7 +125,7 @@ const styles = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "purple",
+        background: "#fb8500",
         color: "white",
         border: "none",
         borderRadius: "50%",
