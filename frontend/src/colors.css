@@ -1,0 +1,22 @@
+:root {
+    --sky-blue: #8ecae6ff;
+    --blue-green: #219ebcff;
+    --prussian-blue: #023047ff;
+    --selective-yellow: #ffb703ff;
+    --ut-orange: #fb8500ff;
+
+    /* Text Colors */
+    --text-primary: var(--prussian-blue);
+    --text-secondary: var(--blue-green);
+
+    /* Background Colors */
+    --background-light: var(--sky-blue);
+    --background-dark: var(--prussian-blue);
+
+    /* Button Colors */
+    --button-primary: var(--blue-green);
+    --button-accent: var(--selective-yellow);
+
+    /* Borders */
+    --border-color: rgba(33, 158, 188, 0.2); /* Slightly transparent blue-green */
+}
