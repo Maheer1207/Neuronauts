@@ -1,23 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../colors.css';
 
 function NotesPanel() {
     const [note, setNote] = useState("");
     const [notes, setNotes] = useState([]);
 
+    useEffect(() => {
+        // Simulate fetching historical notes from a server on component mount
+        const historicalData = [
+            { text: "Patient feels better after medication adjustment.", time: "10:00 AM, Oct 10, 2023" },
+            { text: "Follow-up required in one week.", time: "11:30 AM, Oct 3, 2023" },
+            // More historical notes can be added here
+        ];
+        setNotes(historicalData);
+    }, []);
+
     const handleSaveNote = () => {
-        const timestamp = new Date().toLocaleTimeString();
-        setNotes([...notes, { text: note, time: timestamp }]);
+        const timestamp = new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+        // Add the new note at the beginning of the list
+        setNotes(prevNotes => [{ text: note, time: timestamp }, ...prevNotes]);
         setNote(""); // Clear input after saving
     };
 
     return (
         <div style={styles.gradientWrapper}>
             <div style={styles.container}>
-                <h2 style={styles.header}>Session Notes</h2>
+                <h2 style={styles.header}>Patient Notes</h2>
                 <textarea
-                    rows="4"
-                    style={styles.textarea}
+                    rows="10"
+                    style={styles.textareaLarge}
                     placeholder="Type your note here..."
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
@@ -26,11 +41,12 @@ function NotesPanel() {
                     Save Note
                 </button>
                 <div style={styles.notesList}>
-                    <h3>Saved Notes</h3>
+                    <h3>Session History</h3>
                     <ul style={styles.noteItems}>
                         {notes.map((note, index) => (
                             <li key={index} style={styles.noteItem}>
-                                <strong>{note.time}</strong>: {note.text}
+                                <strong>{note.time}</strong>
+                                <div style={styles.noteText}>{note.text}</div>
                             </li>
                         ))}
                     </ul>
@@ -39,53 +55,52 @@ function NotesPanel() {
         </div>
     );
 }
+
 const styles = {
     gradientWrapper: {
-        padding: "15px", // Increase padding for a thicker border
-        background: "linear-gradient(135deg, rgba(112, 193, 179, 1), rgba(44, 127, 184, 1))", // Gradient background
+        padding: "15px",
+        background: "linear-gradient(135deg, rgba(112, 193, 179, 1), rgba(44, 127, 184, 1))",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
-        borderRadius: "25px", // Maintain rounded corners
+        borderRadius: "25px",
         position: "relative",
-        overflow: "hidden", // Ensure rounded corners are applied to child elements
+        overflow: "hidden",
     },
     container: {
-        backgroundColor: "rgba(255, 255, 255, 0.9)", // Slight transparency for inner container
-        borderRadius: "20px", // Inner container radius should match gradient padding
+        backgroundColor: "rgba(255, 255, 255, 0.9)",
+        borderRadius: "20px",
         width: "100%",
         padding: "20px",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Subtle inner shadow
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
         display: "flex",
         flexDirection: "column",
         gap: "20px",
         alignItems: "center",
         textAlign: "center",
-    },       
+    },
     header: {
         fontSize: "1.8rem",
         marginBottom: "10px",
-        color: "var(--prussian-blue)", // Strong heading color
+        color: "var(--prussian-blue)",
         fontWeight: "bold",
     },
-    textarea: {
+    textareaLarge: {
         width: "100%",
-        maxWidth: "600px",
+        maxWidth: "800px",
+        height: "300px",
         padding: "12px",
         marginBottom: "12px",
         borderRadius: "10px",
-        border: "2px solid var(--blue-green)", // Thicker border for modern look
+        border: "2px solid var(--blue-green)",
         fontFamily: "'Roboto', Arial, sans-serif",
-        fontSize: "1rem",
-        backgroundColor: "#f9fafc", // Soft gray for readability
+        fontSize: "1.2rem",
+        backgroundColor: "#f9fafc",
         color: "var(--prussian-blue)",
         outline: "none",
-        boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.1)", // Inset shadow for depth
-        transition: "border-color 0.3s ease",
-    },
-    textareaFocus: {
-        borderColor: "var(--ut-orange)", // Highlight on focus
+        boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.1)",
+        resize: "none",
     },
     button: {
         marginTop: "10px",
@@ -98,17 +113,13 @@ const styles = {
         fontSize: "1.1rem",
         fontWeight: "bold",
         transition: "background-color 0.3s ease, transform 0.2s ease",
-        boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)", // Elevated button shadow
-    },
-    buttonHover: {
-        backgroundColor: "var(--ut-orange)", // Lively hover effect
-        transform: "scale(1.05)", // Slight scale-up effect
+        boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)",
     },
     notesList: {
         width: "100%",
-        maxWidth: "600px",
+        maxWidth: "800px",
         marginTop: "20px",
-        borderTop: "2px solid var(--border-color)", // Strong separator
+        borderTop: "2px solid var(--border-color)",
         paddingTop: "20px",
         display: "flex",
         flexDirection: "column",
@@ -121,27 +132,23 @@ const styles = {
     },
     noteItem: {
         padding: "15px 20px",
-        backgroundColor: "#f1f5f9", // Subtle note background
+        backgroundColor: "#f1f5f9",
         borderRadius: "12px",
         fontSize: "1rem",
         color: "var(--prussian-blue)",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Clean shadow for depth
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
         display: "flex",
         flexDirection: "column",
         gap: "5px",
-    },
-    noteTime: {
-        fontSize: "0.9rem",
-        color: "var(--text-secondary)", // Muted time color
-        fontWeight: "bold",
+        marginTop: "10px",
+        textAlign: "left",
     },
     noteText: {
         fontSize: "1rem",
-        color: "var(--prussian-blue)", // Note text color
+        color: "var(--prussian-blue)",
         lineHeight: "1.5",
+        textAlign: "left",
     },
 };
-
-
 
 export default NotesPanel;
