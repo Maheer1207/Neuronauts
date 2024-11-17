@@ -3,13 +3,16 @@ import React, { useState, useEffect } from "react";
 import EEGVisualization from "./EEGVisualization";
 import NotesPanel from "./NotesPanel";
 import SoundVisualizer from "./SoundVisualizer";
+import VideoVisualizer from "./VideoVisualizer";
 import { io } from "socket.io-client";
 import "../colors.css";
 import windEMDR from "../audio/windEMDR.mp3";
+import ticktockEMDR from "../audio/ticktockEMDR.mp3";
 
 function Dashboard({ patientName }) {
     const [data, setData] = useState([[], [], [], [], []]); // Placeholder for EEG data (5 channels)
     const [mood, setMood] = useState("");
+    const [audioFile, setAudioFile] = useState(windEMDR); // Default audio file
 
     useEffect(() => {
         const socket = io("http://localhost:5000");
@@ -23,6 +26,10 @@ function Dashboard({ patientName }) {
         return () => socket.disconnect();
     }, []);
 
+    const handleAudioChange = (event) => {
+        setAudioFile(event.target.value); // Update the selected audio file
+    };
+
     return (
         <div style={styles.dashboardContainer}>
             {/* Header */}
@@ -30,7 +37,7 @@ function Dashboard({ patientName }) {
             <div style={styles.firstLayer}>
 
             <div style={styles.header}>
-                <h1 style={styles.title}>Patient Dashboard</h1>
+                <h2 style={styles.title}>Therapist Dashboard</h2>
                 {/* Content */}
             <div style={styles.content}>
                 {/* Right Panel (Notes) */}
@@ -51,14 +58,25 @@ function Dashboard({ patientName }) {
 
 
                     <div style={styles.visualContainer}>
-                    <div style={styles.soundCard}>
-                        <h3 style={styles.mood}>Audio Visualization</h3>
-                        <SoundVisualizer audioFile={windEMDR} mood={mood} />
-                    </div>
+                        <div style={styles.soundCard}>
+                            <h3 style={styles.mood}>Audio Visualization</h3>
+                            {/* Pass selected audio file to SoundVisualizer */}
+                            <SoundVisualizer audioFile={audioFile} mood={mood} />
+                            <select
+                                    style={styles.dropdown}
+                                    value={audioFile}
+                                    onChange={handleAudioChange}
+                                >
+                                    <option value={windEMDR}>Wind EMDR</option>
+                                    <option value={ticktockEMDR}>Tick Tock EMDR</option>
+                                </select>
+                        </div>
+
 
                     <div style={styles.videoCard}>
-
-                    </div>
+                        <h3 style={styles.mood}>Therapy Video</h3>
+                        <VideoVisualizer/>
+                        </div>;
                 </div>
             </div>
         </div>
@@ -83,11 +101,11 @@ const styles = {
         gap: "20px",
     },
     title: {
-        fontSize: "2.5rem",
+        fontSize: "2.0rem",
         fontWeight: "bold",
         margin: 0,
         color: "var(--blue-green)",
-        marginBottom: "25px",
+        marginBottom: "50px",
     },
     subtitle: {
         fontSize: "1.5rem",
@@ -108,8 +126,7 @@ const styles = {
     },
     visualContainer: {
         display: "flex",
-        gap: "20px",
-    },
+        gap: "10px",    },
     graphCard: {
         borderRadius: "20px",
         padding: "20px",
@@ -119,7 +136,6 @@ const styles = {
         flexDirection: "column",
         overflow: "hidden",
         textAlign: "center",
-
     },
     soundCard: {
         borderRadius: "20px",
@@ -129,16 +145,31 @@ const styles = {
         border: "none",
         textAlign: "center",
         flex: 0.5,
+        height:500
+    },
+    dropdown: {
+        marginTop: "15px", // Add some top margin
+        padding: "8px 12px", // Adjust padding for better alignment
+        fontSize: "1rem", // Keep the font size consistent
+        borderRadius: "8px", // Round the corners more
+        border: "1px solid #ddd", // Light border for a clean look
+        background: "white", // Set a clean background color
+        color: "#333", // Slightly darker text for readability
+        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Add a subtle shadow for depth
+        transition: "box-shadow 0.3s, border-color 0.3s", // Smooth transitions
+        lineHeight: "1.5", // Ensure consistent line height
     },
     videoCard: {
         borderRadius: "20px",
-        padding: "20px",
-        background: "#D81159", //linear-gradient(135deg, , rgba(255, 105, 180, 1))", // Gradient background
+        padding: "30px", // Remove padding to ensure the video fully fills
+        background: "#D81159",
         boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)",
         border: "none",
-        textAlign: "center",
         flex: 0.5,
-    },
+        position: "relative", // Required for absolute positioning inside
+        overflow: "hidden", // Prevent content from overflowing
+        height: "500", // Ensure the video fills the container
+    },    
     notesCard: {
         borderRadius: "10px", // Smaller border radius
         width: "90%", // Reduced width to fit better
@@ -155,11 +186,12 @@ const styles = {
         gap: "10px", // Add spacing between elements
     },
     mood: {
-        marginBottom: "10px",
+        marginBottom: "15cpx", // Remove any extra bottom margin
         textAlign: "center",
         fontSize: "1.2rem",
         fontWeight: "bold",
         color: "var(--prussian-blue)",
+        lineHeight: "1.5", // Match line height with the dropdown
     },
 };
 

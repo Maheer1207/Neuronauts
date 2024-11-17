@@ -98,6 +98,7 @@ const styles = {
         background: "white",
         borderRadius: "10px",
         boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+        height: "60%",
     },
     waveform: {
         width: "100%",
