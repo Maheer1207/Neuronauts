@@ -778,131 +778,126 @@ period: period of the time used to compute feature vectors
 state: label for the feature vector
 """
 def generate_feature_vectors_from_samples(file_path, nsamples, period, 
-										  state = None, 
-										  remove_redundant = False,
-										  cols_to_ignore = None):
-	"""
-	Reads data from CSV file in "file_path" and extracts statistical features 
-	for each time window of width "period". 
-	
-	Details:
-	Successive time windows overlap by period / 2. All signals are resampled to 
-	"nsample" points to maintain consistency. Notice that the removal of 
-	redundant features (regulated by "remove_redundant") is based on the 
-	feature names - therefore, if the names output by the other functions in 
-	this script are changed this routine needs to be revised. 
-	
-	Currently the redundant features removed from the lag window are, 
-	for i in [0, nsignals-1]:
-		- mean_q3_i,
-		- mean_q4_i, 
-		- mean_d_q3q4_i,
-		- max_q3_i,
-		- max_q4_i, 
-		- max_d_q3q4_i,
-		- min_q3_i,
-		- min_q4_i, 
-		- min_d_q3q4_i.
-	
-	Parameters:
-		file_path (str): file path to the CSV file containing the records
-		nsamples (int): number of samples to use for each time window. The 
-		signals are down/upsampled to nsamples
-		period (float): desired width of the time windows, in seconds
-		state(str/int/float): label to attribute to the feature vectors
- 		remove_redundant (bool): Should redundant features be removed from the 
-	    resulting feature vectors (redundant features are those that are 
-	    repeated due to the 1/2 period overlap between consecutive windows).
-		cols_to_ignore (array): array of columns to ignore from the input matrix
-		 
-		
-	Returns:
-		numpy.ndarray: 2D array containing features as columns and time windows 
-		as rows.
-		list: list containing the feature names
+                                          state=None, 
+                                          remove_redundant=False,
+                                          cols_to_ignore=None):
+    """
+    Reads data from CSV file in "file_path" and extracts statistical features 
+    for each time window of width "period". 
+    
+    Details:
+    Successive time windows overlap by period / 2. All signals are resampled to 
+    "nsample" points to maintain consistency. Notice that the removal of 
+    redundant features (regulated by "remove_redundant") is based on the 
+    feature names - therefore, if the names output by the other functions in 
+    this script are changed this routine needs to be revised. 
+    
+    Parameters:
+    - file_path (str): file path to the CSV file containing the records
+    - nsamples (int): number of samples to use for each time window. The 
+      signals are down/upsampled to nsamples
+    - period (float): desired width of the time windows, in seconds
+    - state (str/int/float): label to attribute to the feature vectors
+    - remove_redundant (bool): Should redundant features be removed from the 
+      resulting feature vectors (redundant features are those that are 
+      repeated due to the 1/2 period overlap between consecutive windows).
+    - cols_to_ignore (array): array of columns to ignore from the input matrix
+     
+    Returns:
+    - numpy.ndarray: 2D array containing features as columns and time windows 
+      as rows.
+    - list: list containing the feature names
 
-	Author:
-		Original: [lmanso]
-		Reimplemented: [fcampelo]
-	"""	
-	# Read the matrix from file
-	matrix = matrix_from_csv_file(file_path)
-	
-	# We will start at the very begining of the file
-	t = 0.
-	
-	# No previous vector is available at the start
-	previous_vector = None
-	
-	# Initialise empty return object
-	ret = None
-	
-	# Until an exception is raised or a stop condition is met
-	while True:
-		# Get the next slice from the file (starting at time 't', with a 
-		# duration of 'period'
-		# If an exception is raised or the slice is not as long as we expected, 
-		# return the current data available
-		try:
-			s, dur = get_time_slice(matrix, start = t, period = period)
-			if cols_to_ignore is not None:
-				s = np.delete(s, cols_to_ignore, axis = 1)
-		except IndexError:
-			break
-		if len(s) == 0:
-			break
-		if dur < 0.9 * period:
-			break
-		
-		# Perform the resampling of the vector
-		ry, rx = scipy.signal.resample(s[:, 1:], num = nsamples, 
-								 t = s[:, 0], axis = 0)
-		
-		# Slide the slice by 1/2 period
-		t += 0.5 * period
-		
-		
-		# Compute the feature vector. We will be appending the features of the 
-		# current time slice and those of the previous one.
-		# If there was no previous vector we just set it and continue 
-		# with the next vector.
-		r, headers = calc_feature_vector(ry, state)
-		
-		if previous_vector is not None:
-			# If there is a previous vector, the script concatenates the two 
-			# vectors and adds the result to the output matrix
-			feature_vector = np.hstack([previous_vector, r])
-			
-			if ret is None:
-				ret = feature_vector
-			else:
-				ret = np.vstack([ret, feature_vector])
-				
-		# Store the vector of the previous window
-		previous_vector = r
-		if state is not None:
-			 # Remove the label (last column) of previous vector
-			previous_vector = previous_vector[:-1] 
+    Author:
+    - Original: [lmanso]
+    - Reimplemented: [fcampelo]
+    """  
+    # Read the matrix from file
+    matrix = matrix_from_csv_file(file_path)
+    print(f"Matrix shape after reading CSV: {matrix.shape}")
+    
+    # We will start at the very beginning of the file
+    t = 0.0
+    
+    # No previous vector is available at the start
+    previous_vector = None
+    
+    # Initialize empty return object
+    ret = None
+    headers = []
+    
+    # Until an exception is raised or a stop condition is met
+    while True:
+        try:
+            s, dur = get_time_slice(matrix, start=t, period=period)
+            print(f"Time slice: {t}, duration: {dur}")
+            if cols_to_ignore is not None:
+                s = np.delete(s, cols_to_ignore, axis=1)
+            print(f"Shape of slice: {s.shape}")
+        except IndexError:
+            print("IndexError encountered, ending loop.")
+            break
+        
+        if len(s) == 0:
+            print("Empty slice encountered, breaking loop.")
+            break
+        
+        if dur < 0.9 * period:
+            print(f"Duration {dur} less than expected, breaking loop.")
+            break
+        
+        # Perform the resampling of the vector
+        ry, rx = scipy.signal.resample(s[:, 1:], num=nsamples, t=s[:, 0], axis=0)
+        print(f"Resampled data shape: {ry.shape}")
 
-	feat_names = ["lag1_" + s for s in headers[:-1]] + headers
-	
-	if remove_redundant:
-		# Remove redundant lag window features
-		to_rm = ["lag1_mean_q3_", "lag1_mean_q4_", "lag1_mean_d_q3q4_",
-		         "lag1_max_q3_", "lag1_max_q4_", "lag1_max_d_q3q4_",
-				 "lag1_min_q3_", "lag1_min_q4_", "lag1_min_d_q3q4_"]
-		
-		# Remove redundancies
-		for i in range(len(to_rm)):
-			for j in range(ry.shape[1]):
-				rm_str = to_rm[i] + str(j)
-				idx = feat_names.index(rm_str)
-				feat_names.pop(idx)
-				ret = np.delete(ret, idx, axis = 1)
+        # Slide the slice by 1/2 period
+        t += 0.5 * period
+        
+        # Compute the feature vector. We will be appending the features of the 
+        # current time slice and those of the previous one.
+        r, headers = calc_feature_vector(ry, state)
+        print(f"Feature vector computed, headers: {headers}")
 
-	# Return
-	return ret, feat_names
+        if previous_vector is not None:
+            # If there is a previous vector, concatenate the two vectors and add the result to the output matrix
+            feature_vector = np.hstack([previous_vector, r])
+            if ret is None:
+                ret = feature_vector
+            else:
+                ret = np.vstack([ret, feature_vector])
+            print(f"Feature vector appended, current shape of ret: {ret.shape}")
+        
+        # Store the vector of the previous window
+        previous_vector = r
+        if state is not None:
+            # Remove the label (last column) of previous vector
+            previous_vector = previous_vector[:-1]
 
+    # Create feature names
+    feat_names = ["lag1_" + s for s in headers[:-1]] + headers
+    print(f"Initial feature names: {feat_names}")
+    
+    if remove_redundant:
+        # Remove redundant lag window features
+        to_rm = ["lag1_mean_q3_", "lag1_mean_q4_", "lag1_mean_d_q3q4_",
+                 "lag1_max_q3_", "lag1_max_q4_", "lag1_max_d_q3q4_",
+                 "lag1_min_q3_", "lag1_min_q4_", "lag1_min_d_q3q4_"]
+        
+        # Remove redundancies
+        for i in range(len(to_rm)):
+            for j in range(ry.shape[1]):
+                rm_str = to_rm[i] + str(j)
+                if rm_str in feat_names:
+                    idx = feat_names.index(rm_str)
+                    feat_names.pop(idx)
+                    ret = np.delete(ret, idx, axis=1)
+                    print(f"Removed feature: {rm_str}, current feat_names: {feat_names}")
+
+    print(f"Final feature names: {feat_names}")
+    print(f"Shape of final feature matrix: {ret.shape}")
+    
+    # Return the results
+    return ret, feat_names
 
 
 # ========================================================================

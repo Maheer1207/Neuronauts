@@ -42,10 +42,11 @@ def gen_matrix(file_path, output_file, cols_to_ignore, training=True):
 			name, state, _ = filename[:-4].split('_')
 		else: state = None
 	except:
-		print('Wrong file name', file_path)
+		print('Wrong file name !', file_path)
 		sys.exit(-1)
 
 	if (training):
+		print(state)
 		if state.lower() == 'concentrating':
 			state = 2.0
 		elif state.lower() == 'neutral':
@@ -92,6 +93,6 @@ def gen_matrix(file_path, output_file, cols_to_ignore, training=True):
 # 		Documentation: [fcampelo]
 # 	"""
 
-# 	file_path = '/content/input/name-concentrating-1.csv'
-# 	output_file = '/content/output_test.csv'
-# 	gen_training_matrix(file_path, output_file, cols_to_ignore=-1)
+# 	file_path = '/Users/Mira/Dev/Hackathons/NATHacks24/Neuronauts/backend/Output/1/eeg_concentrating_1.csv'
+# 	output_file = '/Users/Mira/Dev/Hackathons/NATHacks24/Neuronauts/backend/Output/1/eeg_concentrating_1_output.csv'
+# 	gen_matrix(file_path, output_file, cols_to_ignore=-1, training=False)
