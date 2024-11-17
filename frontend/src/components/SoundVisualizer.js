@@ -56,7 +56,7 @@ const SoundVisualizer = ({ audioFile }) => {
     };
 
     const decrementSpeed = (step) => {
-        const newSpeed = Math.max(playbackSpeed - step, 0.5); // Minimum at 0.5x
+        const newSpeed = Math.max(playbackSpeed - step, 1); // Minimum at 0.5x
         setPlaybackSpeed(newSpeed);
         if (waveSurferRef.current) {
             waveSurferRef.current.setPlaybackRate(newSpeed);
