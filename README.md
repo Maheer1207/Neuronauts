@@ -22,10 +22,6 @@ git clone git@github.com:Maheer1207/Neuronauts.git
 ```
 ---
 
-**Set up environment variables**:  
-   - Create a `.env` file in the `Neuronauts` directory and add your environment-specific variables.
-   - Use the `envSample.txt` as a template for structuring your `.env` file.
-   - Ensure the IP address in your .env file matches the IP of the network you are currently connected to. 
 
 ## Setting up the Virtual Environment
 1. Ensure you are in the root directory

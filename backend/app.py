@@ -46,7 +46,7 @@ def stream_eeg():
                 print("No data received from BrainFlow.")
                 continue
 
-            # Select only the first 4 channels and scale
+            # Select only the first 5 channels and scale
             scaled_data = (data[:5, :] / 1e6).tolist()  # Scale and convert to list format
             mood = random.choice(["Calm", "Anxious", "Focused", "Happy"])
 
