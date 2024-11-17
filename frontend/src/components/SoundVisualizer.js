@@ -3,18 +3,11 @@ import WaveSurfer from "wavesurfer.js";
 import { FaPlay, FaPause, FaFastForward, FaFastBackward } from "react-icons/fa";
 import { MdFastForward, MdFastRewind } from "react-icons/md";
 
-const SoundVisualizer = ({ audioFile, mood }) => {
+const SoundVisualizer = ({ audioFile }) => {
     const waveSurferRef = useRef(null); // Reference to the WaveSurfer instance
     const containerRef = useRef(null); // Reference to the waveform container
     const [isPlaying, setIsPlaying] = useState(false);
     const [playbackSpeed, setPlaybackSpeed] = useState(1.0); // Track current playback speed
-
-    const mapMoodToSpeed = (mood) => {
-        if (mood === "calm") return 0.8;
-        if (mood === "neutral") return 1.0;
-        if (mood === "excited") return 5.0;
-        return 1.0; // Default speed
-    };
 
     useEffect(() => {
         // Initialize WaveSurfer
@@ -44,14 +37,6 @@ const SoundVisualizer = ({ audioFile, mood }) => {
             }
         };
     }, [audioFile]);
-
-    useEffect(() => {
-        const speed = mapMoodToSpeed(mood);
-        setPlaybackSpeed(speed); // Update local state
-        if (waveSurferRef.current) {
-            waveSurferRef.current.setPlaybackRate(speed);
-        }
-    }, [mood]);
 
     const togglePlay = () => {
         if (waveSurferRef.current?.isPlaying()) {
@@ -87,7 +72,6 @@ const SoundVisualizer = ({ audioFile, mood }) => {
             <div style={styles.controls}>
                 <button onClick={() => decrementSpeed(1.0)} style={styles.controlButton}>
                     <FaFastBackward style={styles.icon} />
-
                 </button>
                 <button onClick={() => decrementSpeed(0.1)} style={styles.controlButton}>
                     <MdFastRewind style={{ ...styles.icon, fontSize: "28px" }} />
@@ -124,11 +108,6 @@ const styles = {
         marginBottom: "10px",
     },
     speedLabel: {
-        fontSize: "1.2rem",
-        fontWeight: "bold",
-        color: "gray",
-    },
-    moodLabel: {
         fontSize: "1.2rem",
         fontWeight: "bold",
         color: "gray",
